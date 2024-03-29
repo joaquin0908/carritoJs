@@ -1,14 +1,41 @@
-const inputColor = document.querySelector("#inputColor")
-const btnVisualizar  = document.querySelector("#btnVisualizar")
-const parrafoHexa  = document.querySelector("#parrafoHexa")
-const containerColor  = document.querySelector("#containerColor")
+const carrito = document.querySelector("#carrito")
+const template = document.querySelector("#template")
+const fragment = document.createDocumentFragment()
+const btnBotonoes = document.querySelectorAll(".card .btn")
 
+const carritoObjeto = {}
 
+const agregarAlCarrito = (e) =>{
+console.log(e.target.dataset.fruta)
 
+const producto = {
+    titulo: e.target.dataset.fruta,
+    id: e.target.dataset.fruta,
+    cantidad: 1,
+ }
 
-btnVisualizar.addEventListener("click", () =>{
-    console.log("me diste click");
-    console.log(inputColor.value);
-    parrafoHexa.textContent = inputColor.value;
-    containerColor.style.backgroundColor = inputColor.value;
-})
+ if(carritoObjeto.hasOwnProperty(producto.titulo)){
+    producto.cantidad = carritoObjeto[producto.titulo].cantidad + 1; 
+ }
+carritoObjeto[producto.titulo] = producto
+
+pintarCarrito()
+
+};
+
+const pintarCarrito = () =>{
+   
+   carrito.textContent = "";
+
+    Object.values(carritoObjeto).forEach((item) => {
+      const clone = template.content.firstElementChild.cloneNode(true)
+      clone.querySelector(".lead").textContent = item.titulo
+      clone.querySelector(".badge").textContent = item.cantidad
+
+      fragment.appendChild(clone)
+   })
+
+  carrito.appendChild(fragment)  
+}
+
+btnBotonoes.forEach((btn) => btn.addEventListener("click", agregarAlCarrito))
